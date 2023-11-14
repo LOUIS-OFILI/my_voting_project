@@ -1,0 +1,145 @@
+
+{% extends "bootstrap_base.html" %}
+{% load static %}
+{% block head %}
+<title>{% block title %}My Votingapp{% endblock %}</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+<style>
+
+</style>
+
+{% endblock %}
+
+ 
+ {% block sidebar %}
+ {% if user.is_authenticated %} 
+ <nav id="sidebar">
+    <div class="text-center">
+           <div class="mb-4">
+              
+               
+           </div>
+           <h3>Voting App</h3>
+           
+           &lt;{{user.username}}&gt;</p>
+     </div>
+
+   <hr />
+   <ul class="list-unstyled components">
+    <li class="active">
+        <a href="/dashboard"><i class="fas fa-tachometer-alt" style="color: lavender;">&nbsp; </i>Dashboard</a>
+   </li>
+       <li>
+       <a href=""><i class="fas fa-vote-yea" style="color: lavender;">&nbsp; </i>Vote</a>
+   </li>
+     <li>
+
+        <a href=""><i class="fa fa-list-alt" style="color: lavender;">&nbsp; </i>Results</a>
+   </li>
+   
+
+   </ul>
+  
+ </nav>
+ 
+   {% else %} 
+   
+    <div class="col-md-1"></div>
+     
+    {% endif %}
+ {% endblock %}
+
+ 
+ <div id="content">
+   {% block navbar %}
+     {% if user.is_authenticated %} 
+   <nav id="navbar-top" class="navbar navbar-expand-sm navbar-light ">
+       <div class="container-fluid">
+
+           <button type="button" id="sidebarCollapse" class="btn btn-primary">
+               <img class="mdi-svg" src="{% static 'mdi/menu.svg' %}" type="image/svg+xml" />
+           </button>
+
+           <button class="btn btn-dark d-inline-block d-sm-none ms-auto"
+                   type="button"
+                   data-bs-toggle="collapse"
+                   data-bs-target="#navbarTop"
+                   aria-controls="navbarTop"
+                   aria-expanded="false" aria-label="Toggle navigation">
+               <img class="mdi-svg" src="{% static 'mdi/menu.svg' %}" type="image/svg+xml" />
+           </button>
+           {% block navbar-links %}
+           <div class="collapse navbar-collapse" id="navbarTop">
+               <ul class="navbar-nav ms-auto">
+               
+                   <li class="nav-item dropdown">
+                       <a class="nav-link dropdown-toggle" href="#" id="navbarAdmin" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user" style="color: #47748b;">&nbsp; </i>
+                         {{user.username}}
+                       </a>
+                       <ul class="dropdown-menu" aria-labelledby="navbarAdmin">
+                         <li><a class="dropdown-item" href="">
+                             Profile</a></li>
+                         <li><a class="dropdown-item" href="{% url 'account_set_password' %}">
+                             Change Password</a></li>
+                             
+                         <li><hr class="dropdown-divider"></li>
+                         <li><a class="dropdown-item" href="{% url 'account_logout' %}">Sign Out</a></li>
+                       </ul>
+                     </li>
+         
+               </ul>
+           </div>
+           {% endblock %}
+       </div>
+   </nav>
+    {% else %}
+   
+   
+   
+   
+   {% endif %}
+   {% endblock %}
+   
+{% block footer %}
+       <div class="contanier" >
+           <footer class="text-end text-secondary fst-italic mt-5">
+           <p>&copy; 2023 votingapp</p>
+           </footer>
+           
+           
+           
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- DataTables CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.css">
+
+<!-- DataTables JS -->
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.js"></script>
+
+<!-- Buttons CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.bootstrap.css">
+
+<!-- Buttons JS -->
+<script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/datatables-buttons/2.4.2/js/dataTables.buttons.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/datatables-buttons/2.4.2/js/buttons.html5.min.js"></script>
+   <!-- pdfmake -->
+<script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+<!-- Print library -->
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+           
+           
+           
+   
+           
+           
+       </div>
+     
+  {% endblock %}
+ 
+ 
+
+  
+
