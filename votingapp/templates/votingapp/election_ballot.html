@@ -1,0 +1,79 @@
+{% extends "votingapp/base.html" %}
+<div id="content-wrapper">
+{% block content %}
+
+<div class="row">
+    <div style="width: 500px; margin: auto;" class="col-sm-12 col-md-12">
+    
+     <div class="card bg-success">
+      <div style="width:450px; margin:auto;" class="card-body">
+        <h3 class="card-title text-center text-light">{{ election_name | upper }}</h3>
+        <h6 class="card-title text-center text-light">Choose One Candidate Below to Vote For </h6>
+
+
+
+
+
+<form method="post" action="{% url 'submit_ballot' %}">
+    {% csrf_token %}
+	{{ form.errors }}
+
+  {% if candidates %}
+  {% for candi in candidates %}
+  <li style="list-style-type:none;">
+   <input  type="radio" class='form-check-input'  name="candidate_id" value="{{ candi.id }}" required>
+
+   <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#candidateBioModal{{ candi.id }}" ><i class="fas fa-user"></i>View Bio</a>
+    <img src="/uploads/{{ candi.photo }}" height="100px" width="100px" class="clist"><span class="text-light">
+   {{ candi.name }}</span>
+   <div class="modal fade" id="candidateBioModal{{ candi.id }}" tabindex="-1" role="dialog" aria-labelledby="candidateBioModalLabel{{ candi.id }}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div align="center" class="modal-content">
+        <div class="modal-header">
+          <h5 style="text-align: center;" class="modal-title" id="candidateBioModalLabel{{ candi.id }}">{{ candi.name }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+         {{ candi.bio }}
+        </div>
+        <div class="modal-footer">
+         
+
+        </div>
+      </div>
+    </div>
+  </div>
+  </li><br>
+
+ 
+   {% endfor %}
+{% endif %}
+   <input  type="hidden" name="election_id" value="{{ election_id }}">
+
+   <div class="d-grid gap-2">
+    <input type="submit"  class="btn btn-primary"  value="Submit Vote" /> 
+   </div>
+   
+
+
+</form>
+
+
+</div>
+</div>
+</div>
+  </div>
+
+ 
+
+{% endblock %}
+
+{% block footer %}
+        <div class="contanier" >
+            <footer class="text-end text-secondary fst-italic mt-5">
+            <p>&copy; Votingapp</p>
+            </footer>
+        </div>
+
+{% endblock %}
+</div>
