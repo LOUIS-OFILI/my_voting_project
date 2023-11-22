@@ -68,7 +68,7 @@ class SubmitBallotView(LoginRequiredMixin, View):
 
 
 # User Ballot List View based on this tutorial 
-        # https://www.geeksforgeeks.org/listview-class-based-views-django/    
+# https://www.geeksforgeeks.org/listview-class-based-views-django/    
 class UserBallotListView(LoginRequiredMixin, ListView):
    model = Vote
    template_name = "votingapp/ballot_list_view.html"
@@ -76,12 +76,15 @@ class UserBallotListView(LoginRequiredMixin, ListView):
    def get_queryset(self, *args, **kwargs): 
         
         #get the Voter instance for filtering
-
+        # get the logged in user's Voter Info 
+        #if the user  is  a registered voter
+        # else return none 
         try:
             voter = Voter.objects.get(user=self.request.user)
         except Voter.DoesNotExist:
             voter = None
-
+        #confirm that the logged in user is 
+        #a registered voter before filtering his vote data
         if voter:
             return Vote.objects.filter(voter=voter)
         else:
@@ -96,9 +99,11 @@ class ElectionResultsView(LoginRequiredMixin, View):
     #fetch each candidates for an election and count their votes
     #and ensure the candidate with higher vote count comes first
         candidates_vote_count = Candidate.objects.annotate(count_vote=Count('vote')).order_by('-count_vote')
-
+          
+          #pass result data to context for use at the template
         context = {'candidates_vote_count': candidates_vote_count}
         
+        # render the template and passalong the context data
         return render(request, self.template_name, context)
 
     
