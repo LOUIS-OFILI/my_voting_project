@@ -1,0 +1,42 @@
+
+{% extends "votingapp/base.html" %}
+<div id="content-wrapper">
+    {% block content %}
+
+<div><h2 class="text-center text-primary">Election Results</h2></div>
+
+
+<table class="table table-dark">
+    <thead>
+    
+    <th>#</th>
+    <th>Candidate Photo</th>
+    <th>Candidate Name</th>
+    <th>Candidate Vote Scores</th>
+    
+    </thead>
+    
+    <tbody>
+          <!-- Check if the vote count object is not empty
+            and Iterate over candidate count object -->
+          {% if candidates_vote_count %}
+          {% for candidate_votes in candidates_vote_count %}
+    <tr>
+        <td>{{ candidate_votes.id }}</td>
+        <td><img src="/uploads/{{ candidate_votes.photo }}" height="100px" width="100px"></td>
+        <td>{{ candidate_votes.name |upper  }} </td>
+        <td>{{ candidate_votes.count_vote  }} </td>
+         <!-- If object_list is empty  -->
+         {% endfor %}
+
+         {% endif %}
+    
+    </tr>
+    
+    </tbody>
+    
+    
+    </table>
+
+    {% endblock %}
+</div>

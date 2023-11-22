@@ -2,10 +2,12 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
 from django.views import View
+from django.views.generic.list import ListView
 from .models import Election, Candidate, Vote, Voter
 from django.contrib import messages
 
-# Create your views here.
+from django.db.models import Count
+
 
 #render homepage
 class HomePage(TemplateView):
@@ -61,5 +63,42 @@ class SubmitBallotView(LoginRequiredMixin, View):
                 voter.voted = True
                 voter.save()
                 messages.success(self.request, 'You have Successfully Voted! Thanks')
-                return redirect('voter_ballot')
+                return redirect('election_result')
+            
+
+
+# User Ballot List View based on this tutorial 
+        # https://www.geeksforgeeks.org/listview-class-based-views-django/    
+class UserBallotListView(LoginRequiredMixin, ListView):
+   model = Vote
+   template_name = "votingapp/ballot_list_view.html"
+
+   def get_queryset(self, *args, **kwargs): 
+        
+        #get the Voter instance for filtering
+
+        try:
+            voter = Voter.objects.get(user=self.request.user)
+        except Voter.DoesNotExist:
+            voter = None
+
+        if voter:
+            return Vote.objects.filter(voter=voter)
+        else:
+            return Vote.objects.none()
+        
+        #this view(logic) is for fetching and counting each candidates votes
+
+class ElectionResultsView(LoginRequiredMixin, View):
+
+    template_name = "votingapp/election_results.html"
+    def get(self, request):
+    #fetch each candidates for an election and count their votes
+    #and ensure the candidate with higher vote count comes first
+        candidates_vote_count = Candidate.objects.annotate(count_vote=Count('vote')).order_by('-count_vote')
+
+        context = {'candidates_vote_count': candidates_vote_count}
+        
+        return render(request, self.template_name, context)
+
     

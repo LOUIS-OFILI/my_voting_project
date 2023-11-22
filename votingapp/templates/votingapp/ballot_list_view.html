@@ -1,0 +1,39 @@
+{% extends "votingapp/base.html" %}
+<div id="content-wrapper">
+    {% block content %}
+
+<div><h2 class="text-center text-primary">Your Ballots</h2></div>
+
+<table class="table table-dark">
+<thead>
+
+<th>#</th>
+<th>Election</th>
+<th>Candidate</th>
+
+</thead>
+
+<tbody>
+      <!-- Iterate over object_list -->
+       {% for object in object_list %} 
+
+<tr>
+    <td>{{ object.id }}</td>
+    <td>{{ object.election.election_type|upper }}</td>
+    <td>{{ object.candidate.name  }} </td>
+     <!-- If object_list is empty  -->
+     {% empty %} 
+     <td></td>
+     <td></td>
+    <td>You have not voted yet.</td> 
+    {% endfor %} 
+
+</tr>
+
+</tbody>
+
+
+</table>
+
+{% endblock %}
+</div>

@@ -3,9 +3,9 @@ from .models import Election, Candidate, Voter, Vote
 
 # Register your models here.
 
-admin.site.site_header = "School Voting App"
-admin.site.site_title = "School Voting App Admin Area"
-admin.site.index_title = "Welcome to the School Voting App Admin Area"
+admin.site.site_header = "General Voting App"
+admin.site.site_title = "General Voting App Admin Area"
+admin.site.index_title = "Welcome to the General Voting App Admin Area"
 
 # Include Election and Candiates Model to the admin area
 admin.site.register(Election)
