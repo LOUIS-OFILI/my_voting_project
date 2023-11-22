@@ -1,11 +1,53 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voting App</title>
-</head>
-<body>
-    <h1>Testing</h1>
-</body>
-</html>
+{% extends "votingapp/home_base.html" %}
+
+    {% block content %}
+   <div style="background:black; height: 500px;" class="row">
+   
+    <div style="margin:40px;">
+    <h1  class="display-1 text-center text-white">Voting App For The Twenty First Century </h1>
+    <br>
+    <h2 class="text-center text-white"> Political Party Elections, Business Elections and School Elections  </h2>
+   <br>
+    <div align="center"> <a class="btn btn-primary btn-lg">Register To Vote Now!</a></div>
+</div>
+   
+</div>
+<br><br>
+<div class="row">
+<div class="card-group">
+    <div class="card">
+      <img src="/static/img/vote-candidate.jpg" class="card-img-top" alt="...">
+     
+      <div class="card-body">
+      <h5 style="color:gold; font-size: 24px;" class="card-title">Vote For Your Favorite Candidate</h5>
+        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.
+            This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.
+        </p>
+        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+      </div>
+    </div>
+    <div class="card">
+      <img src="/static/img/secure-voting.jpg" class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 style="color:gold; font-size: 24px;" class="card-title">Highly Secured Voting Platform</h5>
+        <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
+        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+      </div>
+    </div>
+    <div class="card">
+      <img src="/static/img/vote-result.jpg"  class="card-img-top" alt="...">
+      <div class="card-body">
+        <h5 style="color:gold; font-size: 24px;" class="card-title">View Real Time Vote Results</h5>
+        <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
+        <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
+
+
+
+    {% endblock %}
