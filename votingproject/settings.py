@@ -63,7 +63,9 @@ ROOT_URLCONF = 'votingproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+             os.path.join(BASE_DIR, 'templates')
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -87,7 +89,8 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 WSGI_APPLICATION = 'votingproject.wsgi.application'
-
+# django-auth configuration
+ACCOUNT_EMAIL_VERIFICATION = "none"
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases

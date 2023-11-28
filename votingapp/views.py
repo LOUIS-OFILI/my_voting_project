@@ -36,19 +36,33 @@ class Displayballot(LoginRequiredMixin, TemplateView):
         
         return render(request, self.template_name, context)
 
+
+#this is for processing the submitted ballot
 class SubmitBallotView(LoginRequiredMixin, View):
     def post(self, request):
 
         #get the posted candidate Id
         candidate_id = request.POST.get('candidate_id')
 
-        if not candidate_id:
+        if not candidate_id:   
+        # when user didnt choose a candidate to vote for
             messages.error(self.request, 'You must choose a candidate to vote for')
             return redirect('voter_ballot')
         
         # grab the Voter's data for checking
-        voter =Voter.objects.get(user=request.user)
-        if voter.voted:
+        try:
+         
+         voter = Voter.objects.get(user=request.user)
+
+        except Voter.DoesNotExist:
+            
+            voter = None
+
+        if voter is None:
+            messages.error(self.request, 'You are not registered for this Election!')
+            return redirect('voter_ballot')
+
+        elif voter is not None and voter.voted:
             messages.error(self.request, 'You have Already Voted!')
             return redirect('voter_ballot')
         else:
@@ -63,7 +77,7 @@ class SubmitBallotView(LoginRequiredMixin, View):
                 voter.voted = True
                 voter.save()
                 messages.success(self.request, 'You have Successfully Voted! Thanks')
-                return redirect('election_result')
+                return redirect('voter_ballot')
             
 
 
