@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'bootstrapsidebar',
+    'rest_framework',
+    'knox',
 ]
 
 MIDDLEWARE = [
@@ -57,6 +59,14 @@ MIDDLEWARE = [
       # Add the account middleware:
     "allauth.account.middleware.AccountMiddleware"
 ]
+
+#Make knox's TokenAuthentication your default authentification class for django-rest-framework
+# https://jazzband.github.io/django-rest-knox/installation/
+REST_FRAMEWORK = {
+
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
+ 
+}
 
 ROOT_URLCONF = 'votingproject.urls'
 

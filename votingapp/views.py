@@ -7,7 +7,15 @@ from .models import Election, Candidate, Vote, Voter
 from django.contrib import messages
 
 from django.db.models import Count
-
+# importations for token based authentication
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from knox.auth import TokenAuthentication
+from knox.models import AuthToken
 
 #render homepage
 class HomePage(TemplateView):
@@ -24,6 +32,8 @@ class Displayballot(LoginRequiredMixin, TemplateView):
     template_name = "votingapp/election_ballot.html"
 
     def get(self, request):
+         #fetch the User Token form the AuthToken
+        token= AuthToken.objects.create(request.user)[1]
         elections = Election.objects.all()
 
         for election in elections:
@@ -32,13 +42,18 @@ class Displayballot(LoginRequiredMixin, TemplateView):
             candidates = Candidate.objects.filter(election=election)
 
         context = {'election_id': election_id, 'election_name': election_name,
-                    'candidates': candidates}
+                    'candidates': candidates, 'auth_token': token} 
         
         return render(request, self.template_name, context)
 
 
+
 #this is for processing the submitted ballot
-class SubmitBallotView(LoginRequiredMixin, View):
+@method_decorator(csrf_exempt, name='dispatch')
+class SubmitBallotView(APIView):
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
     def post(self, request):
 
         #get the posted candidate Id
@@ -46,8 +61,7 @@ class SubmitBallotView(LoginRequiredMixin, View):
 
         if not candidate_id:   
         # when user didnt choose a candidate to vote for
-            messages.error(self.request, 'You must choose a candidate to vote for')
-            return redirect('voter_ballot')
+             return Response({'error': 'You must choose a candidate to vote for'}, status=400)
         
         # grab the Voter's data for checking
         try:
@@ -59,12 +73,10 @@ class SubmitBallotView(LoginRequiredMixin, View):
             voter = None
 
         if voter is None:
-            messages.error(self.request, 'You are not registered for this Election!')
-            return redirect('voter_ballot')
+             return Response({'error': 'You are not registered for this Election!'}, status=400)
 
         elif voter is not None and voter.voted:
-            messages.error(self.request, 'You have Already Voted!')
-            return redirect('voter_ballot')
+            return Response({'error': 'You have Already Voted!'}, status=400)
         else:
             candidate = Candidate.objects.get(id=candidate_id)
 
@@ -76,8 +88,9 @@ class SubmitBallotView(LoginRequiredMixin, View):
             if vote:
                 voter.voted = True
                 voter.save()
-                messages.success(self.request, 'You have Successfully Voted! Thanks')
-                return redirect('voter_ballot')
+                return Response({'success': 'Failed to create vote'}, status=200)
+            else:
+                 return Response({'error': 'Failed to create vote'}, status=500)
             
 
 

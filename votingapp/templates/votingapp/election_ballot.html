@@ -1,7 +1,10 @@
 {% extends "votingapp/base.html" %}
 <div id="content-wrapper">
 {% block content %}
-
+<div class="alert" id="success" role="alert">
+</div>
+<div class="alert" id="failure" role="alert">
+</div>
 <div class="row">
     <div style="width: 500px; margin: auto;" class="col-sm-12 col-md-12">
     
@@ -14,14 +17,14 @@
 
 
 
-<form method="post" action="{% url 'submit_ballot' %}">
+<form id="ballot-form">
     {% csrf_token %}
 	{{ form.errors }}
 
   {% if candidates %}
   {% for candi in candidates %}
   <li style="list-style-type:none;">
-   <input  type="radio" class='form-check-input'  name="candidate_id" value="{{ candi.id }}" required>
+   <input  type="radio" class='form-check-input' id="candidate_id"  name="candidate_id" value="{{ candi.id }}" required>
 
    <a class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#candidateBioModal{{ candi.id }}" ><i class="fas fa-user"></i>View Bio</a>
     <img src="/uploads/{{ candi.photo }}" height="100px" width="100px" class="clist"><span class="text-light">
@@ -74,6 +77,60 @@
             <p>&copy; Votingapp</p>
             </footer>
         </div>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+     integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+document.getElementById('ballot-form').addEventListener('submit', function(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    // Get the form data
+    const candidateIdInput = document.getElementById('candidate_id');
+    const successId = document.getElementById('success');
+    const failureId = document.getElementById('failure');
+
+    if (candidateIdInput !== null) {
+        const candidateIdValue = candidateIdInput.value;
+        //const formData = new FormData(event.target);
+       
+        console.log('Form Data:', candidateIdValue )
+     var authToken = "{{ auth_token }}";
+    // Make the fetch request
+    fetch('/submit-ballot/', {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Token ' + authToken,
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'candidate_id=${encodeURIComponent(candidateIdValue)}&${new URLSearchParams(new FormData(event.target)).toString()}'
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        if (data.success) {
+        console.log(data.success);
+        successId.innerHTML=data.success;
+        // Display success message to the user
+    } else if (data.error) {
+        console.error(data.error);
+        failureId.innerHTML=data.error;
+        // Display error message to the user
+    }
+       
+    })
+    .catch(error => {
+        console.error(error);
+        failureId.innerHTML=data.error;
+        // Handle the error response
+    });
+  } else {
+        console.error('Candidate_id input not found');
+        // Handle the absence of candidate_id input as needed
+    }
+});
+
+
+</script>
 
 {% endblock %}
 </div>
