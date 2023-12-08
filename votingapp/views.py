@@ -1,3 +1,5 @@
+# play crucial role in handling https requests and definning logic for rendering responses, serves as the controller in the MVC
+
 from django.shortcuts import render, redirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import TemplateView
@@ -70,7 +72,7 @@ class SubmitBallotView(APIView):
 
         except Voter.DoesNotExist:
             
-            voter = None
+            voter = None 
 
         if voter is None:
              return Response({'error': 'You are not registered for this Election!'}, status=400)
@@ -117,7 +119,7 @@ class UserBallotListView(LoginRequiredMixin, ListView):
         else:
             return Vote.objects.none()
         
-        #this view(logic) is for fetching and counting each candidates votes
+        # this view(logic) is for fetching and counting each candidates votes
 
 class ElectionResultsView(LoginRequiredMixin, View):
 

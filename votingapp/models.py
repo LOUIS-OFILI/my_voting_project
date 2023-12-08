@@ -1,6 +1,6 @@
 from django.db import models
 
-# Create your models here.
+# this is primarily used to to define data models which django uses to create database tables and relationships
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -14,6 +14,9 @@ class Election(models.Model):
     date = models.DateField()
     start_time= models.TimeField(auto_now=False, auto_now_add=False)
     end_time = models.TimeField(auto_now=False, auto_now_add=False)
+
+    def _str_(self):
+        return f"{self.election_name}"
   
   
 #Voter Model
@@ -31,11 +34,26 @@ class Candidate(models.Model):
     photo = models.ImageField(upload_to="candidates/", max_length=150)
     election = models.ForeignKey(Election, on_delete=models.CASCADE)
 
+    def _str_(self):
+        return f"{self.name}"
+
 #Votes Model
 class Vote(models.Model):
     voter = models.ForeignKey(Voter, on_delete=models.CASCADE)
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
     election = models.ForeignKey(Election, on_delete=models.CASCADE, default=False)
+
+
+#custom user data, including BVN
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    full_name = models.CharField(max_length=75)
+    bvn = models.CharField(max_length=11)
+
+    def _str_(self):
+        return f"{self.full_name}'s BVN"
+
+
 
 
 

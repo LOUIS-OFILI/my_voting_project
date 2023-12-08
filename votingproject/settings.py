@@ -69,6 +69,7 @@ REST_FRAMEWORK = {
 }
 
 ROOT_URLCONF = 'votingproject.urls'
+ACCOUNT_FORMS = {'signup': 'votingapp.mysignup.CustomRegistrationForm'}
 
 TEMPLATES = [
     {

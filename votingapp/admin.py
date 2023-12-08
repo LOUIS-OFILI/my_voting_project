@@ -1,5 +1,7 @@
+# to define configurations for the admin interface
+
 from django.contrib import admin
-from .models import Election, Candidate, Voter, Vote
+from .models import Election, Candidate, Voter, Vote, UserProfile
 
 # Register your models here.
 
@@ -12,3 +14,4 @@ admin.site.register(Election)
 admin.site.register(Candidate)
 admin.site.register(Voter)
 admin.site.register(Vote)
+admin.site.register(UserProfile)
